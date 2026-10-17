@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>カジノランキング</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #101827;
+      color: #f8fafc;
+      font-family: -apple-system, sans-serif;
+    }
+    main { max-width: 650px; margin: auto; }
+    h1 { text-align: center; color: #facc15; }
+    .panel {
+      background: #1e293b;
+      padding: 18px;
+      border-radius: 14px;
+      margin: 16px 0;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input { border: 1px solid #64748b; }
+    button {
+      background: #eab308;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .secondary { background: #475569; color: white; }
+    .player {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 4px;
+      border-bottom: 1px solid #475569;
+    }
+    .rank { color: #facc15; font-weight: bold; }
+    .chips { font-weight: bold; white-space: nowrap; }
+    #status { white-space: pre-wrap; color: #cbd5e1; }
+    .hidden { display: none; }
+    small { color: #cbd5e1; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>🎰 CASINO RANKING</h1>
+  <p style="text-align:center">文化祭 チップランキング</p>
+
+  <section class="panel">
+    <h2>🏆 ランキング</h2>
+    <p id="count">読み込み中...</p>
+    <div id="ranking"></div>
+  </section>
+
+  <section class="panel">
+    <h2>🔐 スタッフログイン</h2>
+    <form id="loginForm">
+      <input id="email" type="email"
+        placeholder="スタッフのメールアドレス" required>
+      <input id="password" type="password"
+        placeholder="パスワード" required>
+      <button type="submit">ログイン</button>
+    </form>
+
+    <div id="staffArea" class="hidden">
+      <p>スタッフとしてログイン中</p>
+      <form id="playerForm">
+        <input id="playerName" maxlength="40"
+          placeholder="参加者番号・ニックネーム" required>
+        <input id="chips" type="number" min="0"
+          max="100000000" step="1"
+          placeholder="最終チップ数" required>
+        <button type="submit">登録・チップ数を更新</button>
+      </form>
+      <button id="logout" class="secondary">ログアウト</button>
+    </div>
+    <p id="status" role="status">接続中...</p>
+  </section>
+  <small>※ チップ数が多い順に表示されます。</small>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDUCgQYz4NwFIPRGgWLtPSfCDfgb5V_tGM",
+  authDomain: "school-festival-rankin.firebaseapp.com",
+  databaseURL: "https://school-festival-rankin-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "school-festival-rankin",
+  storageBucket: "school-festival-rankin.firebasestorage.app",
+  messagingSenderId: "116075780256",
+  appId: "1:116075780256:web:671a2d4de7ada2fba791c5",
+  measurementId: "G-0XPSKE5HTY"
+};
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+  const playersRef = db.ref("players");
+
+  const ranking = document.getElementById("ranking");
+  const count = document.getElementById("count");
+  const status = document.getElementById("status");
+  const loginForm = document.getElementById("loginForm");
+  const staffArea = document.getElementById("staffArea");
+
+  let players = [];
+
+  function showStatus(message) {
+    status.textContent = message;
+  }
+
+  function renderRanking() {
+    ranking.replaceChildren();
+
+    const sorted = [...players].sort(
+      (a, b) => b.chips - a.chips ||
+        a.name.localeCompare(b.name, "ja")
+    );
+
+    count.textContent = `${sorted.length} 人が登録されています`;
+
+    if (sorted.length === 0) {
+      ranking.textContent = "まだ参加者が登録されていません。";
+      return;
+    }
+
+    sorted.forEach((player, index) => {
+      const row = document.createElement("div");
+      row.className = "player";
+
+      const left = document.createElement("span");
+      const rank = document.createElement("span");
+      rank.className = "rank";
+      rank.textContent = ` ${index + 1} 位　`;
+      left.append(rank, document.createTextNode(player.name));
+
+      const chips = document.createElement("span");
+      chips.className = "chips";
+      chips.textContent = `${player.chips.toLocaleString()} 枚`;
+
+      row.append(left, chips);
+      ranking.append(row);
+    });
+  }
+
+  playersRef.on("value", snapshot => {
+    players = [];
+    snapshot.forEach(child => {
+      const p = child.val();
+      if (p && typeof p.name === "string" &&
+          Number.isSafeInteger(p.chips) && p.chips >= 0) {
+        players.push({
+          id: child.key,
+          name: p.name,
+          chips: p.chips
+        });
+      }
+    });
+    renderRanking();
+    showStatus("ランキングを最新の状態に更新しています。");
+  }, error => {
+    showStatus("ランキングを読み込めません: " + error.message);
+  });
+
+  loginForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    showStatus("ログイン中...");
+    try {
+      await auth.signInWithEmailAndPassword(
+        document.getElementById("email").value.trim(),
+        document.getElementById("password").value
+      );
+      showStatus("ログインしました。");
+    } catch (error) {
+      showStatus("ログインできませんでした: " + error.message);
+    }
+  });
+
+  auth.onAuthStateChanged(user => {
+    loginForm.classList.toggle("hidden", !!user);
+    staffArea.classList.toggle("hidden", !user);
+    if (user) {
+      showStatus("ログイン中: " + user.email);
+    } else {
+      showStatus("ランキングは誰でも閲覧できます。");
+    }
+  });
+
+  document.getElementById("playerForm")
+    .addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!auth.currentUser) {
+        showStatus("先にスタッフログインをしてください。");
+        return;
+      }
+
+      const name = document.getElementById("playerName")
+        .value.trim();
+      const chips = Number(document.getElementById("chips").value);
+
+      if (!name || !Number.isSafeInteger(chips) ||
+          chips < 0 || chips > 100000000) {
+        showStatus("名前とチップ数を正しく入力してください。");
+        return;
+      }
+
+      try {
+        const snapshot = await playersRef.once("value");
+        let existingId = null;
+
+        snapshot.forEach(child => {
+          if (child.val().name === name && !existingId) {
+            existingId = child.key;
+          }
+        });
+
+        const record = {
+          name,
+          chips,
+          updatedAt: Date.now()
+        };
+
+        if (existingId) {
+          await playersRef.child(existingId).set(record);
+          showStatus("チップ数を更新しました！");
+        } else {
+          await playersRef.push(record);
+          showStatus("参加者を登録しました！");
+        }
+
+        document.getElementById("playerName").value = "";
+        document.getElementById("chips").value = "";
+      } catch (error) {
+        showStatus("保存できませんでした: " + error.message);
+      }
+    });
+
+  document.getElementById("logout").addEventListener("click",
+    async () => {
+      try {
+        await auth.signOut();
+        showStatus("ログアウトしました。");
+      } catch (error) {
+        showStatus("ログアウトできません: " + error.message);
+      }
+    });
+</script>
+</body>
+</html>
