@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>カジノランキング</title>
+  <title>VS嵐C | 俺の馬を信じろ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
@@ -278,12 +281,77 @@ input {
 @keyframes podium-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 500px) { #podium { gap: 5px; } .podium-block { border-radius: 7px 7px 2px 2px; } .podium-name { font-size: .75rem; } .podium-chips { font-size: .7rem; } .podium-number { font-size: 2rem; } }
 @media (prefers-reduced-motion: reduce) { .podium-slot { animation: none; } }
+
+/* ===== VS嵐C VIP RACING 2026: visual-only redesign ===== */
+:root { --ink:#07130e; --deep:#0c2118; --gold:#c9aa70; --cream:#f1e8d5; }
+html {scroll-behavior:smooth;}
+body {padding:0 !important; background:radial-gradient(ellipse at 50% 0%,#234130 0%,#091710 46%,#050c08 100%) !important; color:var(--cream) !important; font-family:'Noto Sans JP',sans-serif;}
+.hero {max-width:1200px; margin:0 auto; border-bottom:1px solid #8b713f; box-shadow:0 16px 40px #0008;}
+.hero-art {display:block;width:100%;height:auto;}
+.hero-nav {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px 22px;background:linear-gradient(160deg,#081911,#07100c);}
+.hero-nav a {display:flex;align-items:center;justify-content:center;min-height:58px;padding:12px 6px;border:1px solid #a88b53;color:#ebd8a6;text-decoration:none;font-family:Cinzel,'Noto Serif JP',serif;font-weight:700;letter-spacing:.07em;text-align:center;background:linear-gradient(135deg,#152e21,#07160e);transition:transform .2s,border-color .2s,box-shadow .2s;}
+.hero-nav a:hover,.hero-nav a:focus-visible {transform:translateY(-3px);border-color:#f1d397;box-shadow:0 7px 18px #0008;}
+.sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+#games-section {max-width:1160px;margin:45px auto 30px;padding:20px;}
+.games-heading,.panel h2 {font-family:Cinzel,'Noto Serif JP',serif !important;letter-spacing:.12em;text-align:center;color:#e9d39d !important;}
+.games-heading {font-size:clamp(1.55rem,3vw,2.35rem);margin:0 0 10px;}
+.games-heading::before,.games-heading::after {content:'✦';font-size:.5em;vertical-align:middle;margin:0 18px;color:#b38e4e;}
+.games-subtitle {font-size:.9rem;margin-bottom:30px;}
+.games-grid {grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+.game-card {min-width:0;padding:12px !important;background:linear-gradient(160deg,#163025,#081810) !important;border:1px solid #b29359 !important;border-radius:5px !important;box-shadow:0 8px 25px #0008,inset 0 0 0 4px #0b1b13,inset 0 0 0 5px #80673d !important;transition:transform .25s,box-shadow .25s;}
+.game-card:hover {transform:translateY(-5px);box-shadow:0 15px 30px #000b,0 0 18px #a88b5328 !important;}
+.game-image {height:175px;object-fit:cover;border-radius:3px;border:1px solid #7d6b45;margin:0 0 15px;}
+.game-card::before {content:'GAME';display:block;text-align:center;letter-spacing:.24em;font:700 .7rem Cinzel,serif;color:#c9aa70;order:0;}
+.game-card h3 {font-family:'Noto Serif JP',serif;font-size:clamp(.88rem,1.45vw,1.15rem);text-align:center;color:#f2e2bd !important;margin:7px 0 14px;overflow-wrap:anywhere;}
+.game-card p {text-align:center;font-size:.79rem;line-height:1.75;}
+.game-card .game-catch {color:#f1dcaa;}
+main {max-width:1160px;margin:0 auto;padding:0 20px 40px;}
+.panel {background:linear-gradient(145deg,#10271b,#06140d) !important;border:1px solid #927b4b !important;border-radius:5px !important;box-shadow:0 14px 35px #0008,inset 0 0 0 5px #0b1b13,inset 0 0 0 6px #6e5a36 !important;padding:clamp(18px,3vw,34px) !important;margin:30px 0 !important;}
+.panel h2 {font-size:clamp(1.45rem,3vw,2.1rem);margin:0 0 16px;}
+#count {text-align:center;color:#cbb78a;font-weight:500;}
+#podium {max-width:770px;margin:35px auto 35px;gap:14px;}
+.podium-slot {position:relative;}
+.podium-name {font-family:'Noto Serif JP',serif;font-size:clamp(.72rem,1.5vw,1.08rem);color:#f7e7c6;}
+.podium-chips {color:#d8c293;font-family:Cinzel,'Noto Sans JP',sans-serif;}
+.podium-block {position:relative;overflow:hidden;border-radius:10px 10px 2px 2px;box-shadow:inset 0 0 18px #0009,0 10px 22px #000a;}
+.podium-first .podium-block {height:185px;background:linear-gradient(145deg,#735018,#26160a 55%,#4e3611);border:2px solid #f0c96e;color:#ffe6a4;}
+.podium-second .podium-block {height:145px;background:linear-gradient(145deg,#53656b,#14242b 65%,#38464b);border:2px solid #c4d1d4;color:#e2ebed;}
+.podium-third .podium-block {height:115px;background:linear-gradient(145deg,#704a35,#27160f 65%,#513220);border:2px solid #d7a077;color:#f3c39c;}
+.podium-block::after {content:'';position:absolute;inset:6px;border:1px solid currentColor;opacity:.24;pointer-events:none;}
+.podium-medal {font-size:1.65rem;line-height:1.3;}
+.podium-medal::before {content:'◆';}
+.podium-first .podium-medal::before {content:'♛';font-size:2.1rem;}
+.podium-number {font:800 clamp(2.5rem,5vw,4rem) Cinzel,serif;text-shadow:0 2px 6px #0008;}
+#ranking {max-width:880px;margin:20px auto;}
+#ranking > .player {background:linear-gradient(90deg,#142e21,#0a1c13) !important;border:1px solid #526b52 !important;border-left:3px solid #b49a61 !important;border-radius:4px;padding:16px 20px !important;box-shadow:none !important;}
+.rank {font-family:Cinzel,'Noto Sans JP',sans-serif;color:#d9bf81;}
+.chips {color:#eddfb9;}
+input {font-family:inherit;min-width:0;}
+button {font-family:inherit;transition:filter .2s,transform .2s;}
+button:hover {filter:brightness(1.1);transform:translateY(-1px);}
+#staff-panel {max-width:900px;margin-left:auto !important;margin-right:auto !important;}
+#status,small {color:#b8c6b8;}
+@media(max-width:900px) {.games-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.game-image{height:190px;}}
+@media(max-width:600px) {.hero-nav{gap:6px;padding:10px 8px;}.hero-nav a{font-size:.68rem;letter-spacing:0;min-height:48px;padding:7px 2px;}#games-section{margin:24px auto 10px;padding:12px;}.games-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}.game-card{padding:9px !important;}.game-image{height:110px;}.game-card h3{font-size:.78rem;}.game-card p{font-size:.7rem;}.game-card::before{font-size:.57rem;}main{padding:0 12px 30px;}.panel{padding:17px !important;}#podium{gap:5px;}.podium-first .podium-block{height:145px;}.podium-second .podium-block{height:112px;}.podium-third .podium-block{height:92px;}.podium-medal{font-size:1.1rem;}.podium-first .podium-medal::before{font-size:1.5rem;}#ranking > .player{padding:12px 9px !important;font-size:.8rem;}.chips{font-size:.75rem;}}
+@media(max-width:370px){.games-grid{grid-template-columns:1fr;}.game-image{height:175px;}.hero-nav a{font-size:.58rem;}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}.game-card,.hero-nav a,button{transition:none;}.game-card:hover,.hero-nav a:hover,button:hover{transform:none;}}
+
   </style>
 </head>
 <body>
+<header class="hero" id="top">
+  <h1 class="sr-only">VS嵐C — 俺の馬を信じろ</h1>
+  <img class="hero-art" src="vsarashic-hero.png" alt="夕暮れの競馬場と、VS嵐C・俺の馬を信じろ・THE GRAND TURFのタイトル">
+  <nav class="hero-nav" aria-label="ページ内ナビゲーション">
+    <a href="#games-section">GAME LINEUP</a>
+    <a href="#ranking-panel">LIVE RANKING</a>
+    <a href="#staff-panel">STAFF AREA</a>
+  </nav>
+</header>
+
   
 <section id="games-section">
-  <h2 class="games-heading">🎮 GAMES</h2>
+  <h2 class="games-heading">GAME LINEUP</h2>
   <p class="games-subtitle">4つのゲームで、勝利をつかめ。</p>
 
   <div class="games-grid">
@@ -318,18 +386,18 @@ input {
 </section>
 
 <main>
-  <h1 class="site-title">🏇 VS嵐C</h1>
-  <p class="site-subtitle">俺の馬を信じろ — SCHOOL FESTIVAL CASINO</p>
 
-  <section class="panel">
-    <h2>🏆 ランキング</h2>
+
+  <section class="panel" id="ranking-panel">
+    <h2>LIVE RANKING</h2>
     <p id="count">読み込み中...</p>
     <div id="podium" aria-label="上位3名の表彰台" hidden></div>
     <div id="ranking"></div>
   </section>
 
-  <section class="panel">
-    <h2>🔐 スタッフログイン</h2>
+  <section class="panel" id="staff-panel">
+    <h2>STAFF AREA</h2>
+    <p style="text-align:center;color:#c9aa70">スタッフログイン</p>
     <form id="loginForm">
       <input id="email" type="email"
         placeholder="スタッフのメールアドレス" required>
@@ -424,7 +492,7 @@ const firebaseConfig = {
       block.className = "podium-block";
       const medal = document.createElement("div");
       medal.className = "podium-medal";
-      medal.textContent = ["👑", "🥈", "🥉"][index];
+      medal.textContent = ""; // Decorative symbols are supplied by CSS.
       const number = document.createElement("div");
       number.className = "podium-number";
       number.textContent = String(index + 1);
