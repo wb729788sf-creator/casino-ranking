@@ -171,24 +171,15 @@ input {
   margin-bottom: 28px;
 }
 
-/* ランキング上位3人 */
-#ranking > :nth-child(1) {
-  background: linear-gradient(110deg, #493b16, #19251a) !important;
-  border: 2px solid #e5c45f !important;
-  box-shadow: 0 0 16px #d8b44a30;
+/* 4位以下のランキングは深緑で統一 */
+#ranking > .player {
+  background: #10251b !important;
+  border: 1px solid #4c6249 !important;
+  box-shadow: none !important;
+  animation: none !important;
+  filter: none !important;
 }
 
-#ranking > :nth-child(2) {
-  background: linear-gradient(110deg, #343a3b, #15221b) !important;
-  border: 2px solid #bfc8c7 !important;
-}
-
-#ranking > :nth-child(3) {
-  background: linear-gradient(110deg, #4b3022, #17231a) !important;
-  border: 2px solid #bd8156 !important;
-}
-
-  
 /* VS嵐C ゲーム紹介カード */
 #games-section {
   max-width: 900px;
@@ -287,14 +278,6 @@ input {
 @keyframes podium-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 500px) { #podium { gap: 5px; } .podium-block { border-radius: 7px 7px 2px 2px; } .podium-name { font-size: .75rem; } .podium-chips { font-size: .7rem; } .podium-number { font-size: 2rem; } }
 @media (prefers-reduced-motion: reduce) { .podium-slot { animation: none; } }
-  /* 4位以下は通常の深緑色 */
-#ranking > :nth-child(n+4) {
-  background: #10251b !important;
-  border: 1px solid #4c6249 !important;
-  box-shadow: none !important;
-  animation: none !important;
-  filter: none !important;
-}
   </style>
 </head>
 <body>
