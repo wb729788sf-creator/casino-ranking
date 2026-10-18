@@ -241,9 +241,118 @@ input {
   border: 2px solid #bd8156 !important;
 }
 
+  
+/* VS嵐C ゲーム紹介カード */
+#games-section {
+  max-width: 900px;
+  margin: 36px auto;
+  padding: 20px;
+  color: #f5f0df;
+}
+
+.games-heading {
+  text-align: center;
+  color: #e2c36d !important;
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.games-subtitle {
+  text-align: center;
+  color: #d8cba5;
+  margin-bottom: 24px;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.game-card {
+  background: linear-gradient(145deg, #172b20, #0a150e);
+  border: 1px solid #806a38;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 18px #0005;
+}
+
+.game-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.game-card h3 {
+  color: #e2c36d !important;
+  font-size: 1.05rem;
+  margin: 8px 0 12px;
+}
+
+.game-card p {
+  color: #d6ddcf;
+  line-height: 1.7;
+  font-size: 0.9rem;
+}
+
+.game-card .game-catch {
+  color: #fff1c6;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  #games-section {
+    padding: 12px;
+  }
+
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-card {
+    padding: 16px;
+  }
+}
+
   </style>
 </head>
 <body>
+  
+<section id="games-section">
+  <h2 class="games-heading">🎮 GAMES</h2>
+  <p class="games-subtitle">4つのゲームで、勝利をつかめ。</p>
+
+  <div class="games-grid">
+    <article class="game-card">
+      <div class="game-icon">⚽</div>
+      <h3>キッキングスナイパー</h3>
+      <p class="game-catch">ボールを蹴って缶を倒せ！</p>
+      <p>倒した缶に応じてポイントを獲得。</p>
+    </article>
+
+    <article class="game-card">
+      <div class="game-icon">🪙</div>
+      <h3>コインスタック</h3>
+      <p class="game-catch">回る台の上でコインを積み上げろ！</p>
+      <p>積み上げたコインの合計ポイントを競う。</p>
+    </article>
+
+    <article class="game-card">
+      <div class="game-icon">🎰</div>
+      <h3>ルーレット</h3>
+      <p class="game-catch">二分の一を当ててポイント増やせ！</p>
+      <p>運を味方につけて勝負しよう。</p>
+    </article>
+
+    <article class="game-card">
+      <div class="game-icon">🏇</div>
+      <h3>競馬</h3>
+      <p class="game-catch">今までのポイントを使って最後の賭け！</p>
+      <p>最後の大勝負で頂点を目指せ。</p>
+    </article>
+  </div>
+</section>
+
 <main>
   <h1 class="site-title">🏇 VS嵐C</h1>
   <p class="site-subtitle">俺の馬を信じろ — SCHOOL FESTIVAL CASINO</p>
