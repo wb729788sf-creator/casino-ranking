@@ -314,6 +314,16 @@ input {
   }
 }
 
+  /* ゲームカードの画像 */
+.game-image {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #806a38;
+}
   </style>
 </head>
 <body>
@@ -324,28 +334,28 @@ input {
 
   <div class="games-grid">
     <article class="game-card">
-      <div class="game-icon">⚽</div>
+      <img class="game-image" src="kicking.png.png" alt="キッキングスナイパー">
       <h3>キッキングスナイパー</h3>
       <p class="game-catch">ボールを蹴って缶を倒せ！</p>
       <p>倒した缶に応じてポイントを獲得。</p>
     </article>
 
     <article class="game-card">
-      <div class="game-icon">🪙</div>
+      <img class="game-image" src="coin.png.png" alt="コインスタック">
       <h3>コインスタック</h3>
       <p class="game-catch">回る台の上でコインを積み上げろ！</p>
       <p>積み上げたコインの合計ポイントを競う。</p>
     </article>
 
     <article class="game-card">
-      <div class="game-icon">🎰</div>
+      <img class="game-image" src="roulette.png.png" alt="ルーレット">
       <h3>ルーレット</h3>
       <p class="game-catch">二分の一を当ててポイント増やせ！</p>
       <p>運を味方につけて勝負しよう。</p>
     </article>
 
     <article class="game-card">
-      <div class="game-icon">🏇</div>
+      <img class="game-image" src="horse.png.png" alt="競馬">
       <h3>競馬</h3>
       <p class="game-catch">今までのポイントを使って最後の賭け！</p>
       <p>最後の大勝負で頂点を目指せ。</p>
