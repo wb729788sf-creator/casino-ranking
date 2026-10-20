@@ -436,15 +436,36 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
   <h1 class="sr-only">VS嵐C — 俺の馬を信じろ</h1>
   <img class="hero-art" src="vsarashic-hero.png" alt="夕暮れの競馬場と、VS嵐C・俺の馬を信じろ・THE GRAND TURFのタイトル">
   <nav class="hero-nav" aria-label="ページ内ナビゲーション">
-    <a href="#games-section">GAME LINEUP</a>
     <a href="#ranking-panel">LIVE RANKING</a>
+    <a href="#games-section">GAME LINEUP</a>
     <a href="#staff-panel">STAFF AREA</a>
   </nav>
 </header>
 
   
+
+
+<main>
+
+
+  <section class="panel" id="ranking-panel">
+    <h2>LIVE RANKING</h2>
+    <p id="count">読み込み中...</p>
+    <div id="podium" aria-label="上位3名の表彰台" hidden></div>
+    <div id="ranking"></div>
+  </section>
+
+
+  <section class="panel" id="class-guide-panel" aria-labelledby="class-guide-heading">
+    <h2 id="class-guide-heading">CLASS GUIDE</h2>
+    <div id="class-guide-list"></div>
+    <p class="class-guide-note">※ チップ数の基準は仮設定。後から変更可能。</p>
+  </section>
+
+
 <section id="games-section">
   <h2 class="games-heading">GAME LINEUP</h2>
+  <p class="games-subtitle">4つのゲームで、勝利をつかめ</p>
 
   <div class="games-grid">
     <article class="game-card">
@@ -476,21 +497,6 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
     </article>
   </div>
 </section>
-
-<main>
-
-
-  <section class="panel" id="class-guide-panel" aria-labelledby="class-guide-heading">
-    <h2 id="class-guide-heading">CLASS GUIDE</h2>
-    <div id="class-guide-list"></div>
-  </section>
-
-  <section class="panel" id="ranking-panel">
-    <h2>LIVE RANKING</h2>
-    <p id="count">読み込み中...</p>
-    <div id="podium" aria-label="上位3名の表彰台" hidden></div>
-    <div id="ranking"></div>
-  </section>
 
   <section class="panel" id="staff-panel">
     <h2>STAFF AREA</h2>
