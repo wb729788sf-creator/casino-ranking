@@ -408,6 +408,27 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
   font-weight: 900;
   text-shadow: none;
 }
+
+/* CLASS GUIDE: ランキングと同じ階級設定で表示 */
+#class-guide-list { display: grid; gap: 12px; max-width: 880px; margin: 22px auto 12px; }
+.class-guide-item {
+  display: flex; align-items: center; gap: 17px;
+  padding: 17px 20px;
+  background: var(--tier-bg);
+  border: 2px solid var(--tier-border);
+  border-radius: 9px;
+}
+.class-guide-icon { flex: 0 0 30px; width: 30px; text-align: center; font-size: 1.5rem; color: var(--tier-text); }
+.class-guide-details { min-width: 0; }
+.class-guide-name { font: 800 1.25rem Cinzel, 'Noto Sans JP', sans-serif; color: var(--tier-text); }
+.class-guide-range { margin-top: 5px; color: #e6dfcf; font-size: .9rem; }
+.class-guide-note { max-width: 880px; margin: 16px auto 0; color: #b8c6b8; font-size: .8rem; }
+@media (max-width: 600px) {
+  .class-guide-item { padding: 13px 12px; gap: 12px; }
+  .class-guide-name { font-size: 1.05rem; }
+  .class-guide-range { font-size: .8rem; }
+}
+
   </style>
 </head>
 <body>
@@ -459,6 +480,13 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
 
 <main>
 
+
+  <section class="panel" id="class-guide-panel" aria-labelledby="class-guide-heading">
+    <h2 id="class-guide-heading">CLASS GUIDE</h2>
+    <p style="text-align:center;color:#cbb78a">チップ数によって決まる5つの階級</p>
+    <div id="class-guide-list"></div>
+    <p class="class-guide-note">※ チップ数の基準は仮設定。後から変更可能。</p>
+  </section>
 
   <section class="panel" id="ranking-panel">
     <h2>LIVE RANKING</h2>
@@ -558,6 +586,39 @@ const firebaseConfig = {
     badge.textContent = tier.name;
     return badge;
   }
+
+
+  // CLASS GUIDEもCHIP_TIERSの設定を使い、ランキングと配色を統一する
+  function renderClassGuide() {
+    const guide = document.getElementById("class-guide-list");
+    guide.replaceChildren();
+    const icons = ["♛", "♕", "◇", "✦", "●"];
+    CHIP_TIERS.forEach((tier, index) => {
+      const previous = CHIP_TIERS[index - 1];
+      const range = previous
+        ? `${tier.min.toLocaleString("ja-JP")}〜${(previous.min - 1).toLocaleString("ja-JP")} C`
+        : `${tier.min.toLocaleString("ja-JP")} C以上`;
+      const item = document.createElement("div");
+      item.className = "class-guide-item";
+      applyTierStyle(item, tier);
+      const icon = document.createElement("span");
+      icon.className = "class-guide-icon";
+      icon.textContent = icons[index] || "◆";
+      icon.setAttribute("aria-hidden", "true");
+      const details = document.createElement("div");
+      details.className = "class-guide-details";
+      const name = document.createElement("div");
+      name.className = "class-guide-name";
+      name.textContent = tier.name;
+      const amount = document.createElement("div");
+      amount.className = "class-guide-range";
+      amount.textContent = range;
+      details.append(name, amount);
+      item.append(icon, details);
+      guide.append(item);
+    });
+  }
+  renderClassGuide();
 
   function renderRanking() {
     ranking.replaceChildren();
