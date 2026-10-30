@@ -502,10 +502,8 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
     <h2>STAFF AREA</h2>
     <p style="text-align:center;color:#c9aa70">スタッフログイン</p>
     <form id="loginForm">
-      <input id="email" type="email"
-        placeholder="スタッフのメールアドレス" required>
       <input id="password" type="password"
-        placeholder="パスワード" required>
+        placeholder="スタッフ共通パスワード" autocomplete="current-password" required>
       <button type="submit">ログイン</button>
     </form>
 
@@ -712,12 +710,15 @@ const firebaseConfig = {
     showStatus("ランキングを読み込めません: " + error.message);
   });
 
+  // Firebase Authenticationで作成した共通スタッフアカウントのメールアドレス
+  const STAFF_LOGIN_EMAIL = "t_kota@suou.waseda.jp";
+
   loginForm.addEventListener("submit", async event => {
     event.preventDefault();
     showStatus("ログイン中...");
     try {
       await auth.signInWithEmailAndPassword(
-        document.getElementById("email").value.trim(),
+        STAFF_LOGIN_EMAIL,
         document.getElementById("password").value
       );
       showStatus("ログインしました。");
@@ -730,7 +731,7 @@ const firebaseConfig = {
     loginForm.classList.toggle("hidden", !!user);
     staffArea.classList.toggle("hidden", !user);
     if (user) {
-      showStatus("ログイン中: " + user.email);
+      showStatus("スタッフとしてログイン中です。");
     } else {
       showStatus("ランキングは誰でも閲覧できます。");
     }
