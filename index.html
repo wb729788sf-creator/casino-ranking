@@ -429,6 +429,63 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
   .class-guide-range { font-size: .8rem; }
 }
 
+
+/* GAME LINEUP: 横スワイプ対応カルーセル */
+.game-carousel { max-width: 650px; margin: 0 auto; position: relative; }
+#games-section .games-grid {
+  display: flex !important; grid-template-columns: none !important;
+  gap: 0 !important; overflow-x: auto; scroll-snap-type: x mandatory;
+  scroll-behavior: smooth; scrollbar-width: none; overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+}
+#games-section .games-grid::-webkit-scrollbar { display: none; }
+#games-section .game-card {
+  flex: 0 0 100%; width: 100%; scroll-snap-align: start;
+  box-sizing: border-box; margin: 0; padding: 18px !important;
+}
+#games-section .game-image { height: clamp(190px, 40vw, 300px); }
+.game-carousel-controls { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 18px; }
+.game-carousel-arrow { width: 46px; height: 46px; margin: 0; border-radius: 50% !important; font-size: 1.5rem; padding: 0; }
+.game-carousel-dots { display: flex; gap: 9px; align-items: center; }
+.game-carousel-dot { width: 11px; height: 11px; padding: 0; margin: 0; border-radius: 50% !important; background: #687563 !important; border: 1px solid #c9aa70 !important; }
+.game-carousel-dot[aria-current="true"] { background: #f1d397 !important; box-shadow: 0 0 0 3px #a88b5344; }
+@media(max-width:600px) {
+  #games-section .game-card { padding: 13px !important; }
+  #games-section .game-image { height: 210px; }
+}
+
+/* GAME LINEUP: 中央カード＋左右に次のカードを少し表示 */
+.game-carousel { max-width: 850px; }
+#games-section .games-grid {
+  gap: 16px !important;
+  padding: 8px 12% 16px !important;
+  scroll-padding-inline: 12%;
+  scrollbar-width: thin;
+  scrollbar-color: #b99a4b #10251b;
+}
+#games-section .games-grid::-webkit-scrollbar { display: block; height: 7px; }
+#games-section .games-grid::-webkit-scrollbar-thumb { background: #b99a4b; border-radius: 9px; }
+#games-section .game-card {
+  flex: 0 0 100%; width: 100%;
+  scroll-snap-align: center;
+  padding: 22px !important;
+}
+/* カード幅はスクロール領域の76%にする（両側に12%の余白） */
+#games-section .game-card { flex-basis: 100%; width: 100%; }
+#games-section .games-grid { box-sizing: border-box; }
+#games-section .game-card h3 { font-size: clamp(1.35rem, 2.8vw, 1.9rem) !important; line-height: 1.5; }
+#games-section .game-card p { font-size: clamp(1.02rem, 1.9vw, 1.2rem) !important; line-height: 1.85; }
+#games-section .game-card .game-catch { font-size: clamp(1.12rem, 2vw, 1.32rem) !important; }
+#games-section .game-card::before { font-size: .95rem !important; }
+#games-section .game-image { height: clamp(210px, 35vw, 340px); }
+@media(max-width:600px) {
+  #games-section .games-grid { gap: 10px !important; padding: 8px 9% 14px !important; scroll-padding-inline: 9%; }
+  #games-section .game-card { padding: 15px !important; }
+  #games-section .game-card h3 { font-size: 1.3rem !important; }
+  #games-section .game-card p { font-size: 1rem !important; }
+  #games-section .game-card .game-catch { font-size: 1.08rem !important; }
+  #games-section .game-image { height: 210px; }
+}
   </style>
 </head>
 <body>
@@ -467,7 +524,8 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
   <h2 class="games-heading">GAME LINEUP</h2>
   <p class="games-subtitle">4つのゲームで、勝利をつかめ</p>
 
-  <div class="games-grid">
+  <div class="game-carousel" aria-label="ゲーム紹介カルーセル">
+  <div class="games-grid" id="game-carousel-track">
     <article class="game-card">
       <img class="game-image" src="kicking.png" alt="キッキングスナイパー">
       <h3>キッキングスナイパー</h3>
@@ -495,6 +553,12 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
       <p class="game-catch">今までのポイントを使って最後の賭け！</p>
       <p>最後の大勝負で頂点を目指せ</p>
     </article>
+  </div>
+  <div class="game-carousel-controls">
+    <button type="button" class="game-carousel-arrow" id="game-prev" aria-label="前のゲーム">‹</button>
+    <div class="game-carousel-dots" id="game-carousel-dots" aria-label="ゲームの切り替え"></div>
+    <button type="button" class="game-carousel-arrow" id="game-next" aria-label="次のゲーム">›</button>
+  </div>
   </div>
 </section>
 
@@ -542,6 +606,48 @@ const firebaseConfig = {
 };
 
   firebase.initializeApp(firebaseConfig);
+
+  // ゲーム紹介：矢印・ドット・スワイプ／スクロールを連動
+  (() => {
+    const track = document.getElementById('game-carousel-track');
+    const cards = [...track.querySelectorAll('.game-card')];
+    const dots = document.getElementById('game-carousel-dots');
+    let current = 0;
+    const indicators = cards.map((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'game-carousel-dot';
+      dot.setAttribute('aria-label', `ゲーム${i + 1}を表示`);
+      dot.addEventListener('click', () => goTo(i));
+      dots.append(dot);
+      return dot;
+    });
+    function setActive(i) {
+      current = i;
+      indicators.forEach((dot, n) => dot.setAttribute('aria-current', String(n === i)));
+    }
+    function goTo(i) {
+      const target = (i + cards.length) % cards.length;
+      const card = cards[target];
+      const left = track.scrollLeft + card.getBoundingClientRect().left - track.getBoundingClientRect().left - (track.clientWidth - card.clientWidth) / 2;
+      track.scrollTo({ left, behavior: 'smooth' });
+      setActive(target);
+    }
+    document.getElementById('game-prev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('game-next').addEventListener('click', () => goTo(current + 1));
+    let timer;
+    track.addEventListener('scroll', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const center = track.getBoundingClientRect().left + track.clientWidth / 2;
+        const index = cards.reduce((best, card, i) =>
+          Math.abs(card.getBoundingClientRect().left + card.clientWidth / 2 - center) <
+          Math.abs(cards[best].getBoundingClientRect().left + cards[best].clientWidth / 2 - center) ? i : best, 0);
+        setActive(index);
+      }, 70);
+    }, { passive: true });
+    setActive(0);
+  })();
   const auth = firebase.auth();
   const db = firebase.database();
   const playersRef = db.ref("players");
@@ -711,7 +817,7 @@ const firebaseConfig = {
   });
 
   // Firebase Authenticationで作成した共通スタッフアカウントのメールアドレス
-  const STAFF_LOGIN_EMAIL = "t_kota@suou.waseda.jp";
+  const STAFF_LOGIN_EMAIL = "REPLACE_WITH_STAFF_EMAIL";
 
   loginForm.addEventListener("submit", async event => {
     event.preventDefault();
