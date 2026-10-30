@@ -486,6 +486,28 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
   #games-section .game-card .game-catch { font-size: 1.08rem !important; }
   #games-section .game-image { height: 210px; }
 }
+
+/* GAME RULES: 画像ポップアップ */
+#games-section .game-card { cursor: pointer; }
+#games-section .game-card:focus-visible { outline: 3px solid #f1d397; outline-offset: 3px; }
+#games-section .rule-open {
+  display: block; width: min(100%, 330px); margin: 18px auto 4px;
+  padding: 13px 18px; font-size: 1.05rem; letter-spacing: .05em;
+  border-radius: 7px !important;
+}
+.rule-modal[hidden] { display: none !important; }
+.rule-modal { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,.88);
+  display: flex; justify-content: center; align-items: center; padding: 55px 12px 18px; }
+.rule-modal-inner { position: relative; max-width: min(1300px, 100%); max-height: 100%; overflow: auto;
+  border: 2px solid #b99a4b; background: #08140e; box-shadow: 0 16px 60px #000; border-radius: 7px; }
+.rule-modal-image { display: block; width: 100%; height: auto; max-height: calc(100dvh - 100px); object-fit: contain; }
+.rule-modal-close { position: fixed; z-index: 10001; top: 12px; right: 16px;
+  width: 44px; height: 44px; margin: 0; padding: 0; border-radius: 50% !important;
+  font-size: 1.6rem; line-height: 1; }
+body.rule-modal-open { overflow: hidden; }
+@media(max-width:600px) { .rule-modal { padding: 65px 6px 12px; }
+  #games-section .rule-open { font-size: 1rem; } }
+
   </style>
 </head>
 <body>
@@ -526,32 +548,36 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
 
   <div class="game-carousel" aria-label="ゲーム紹介カルーセル">
   <div class="games-grid" id="game-carousel-track">
-    <article class="game-card">
+    <article class="game-card" data-rule-image="rules-kicking.jpg" data-rule-title="キッキングスナイパー" tabindex="0" role="group" aria-label="キッキングスナイパー：クリックで詳しいルールを表示">
       <img class="game-image" src="kicking.png" alt="キッキングスナイパー">
       <h3>キッキングスナイパー</h3>
       <p class="game-catch">ボールを蹴って缶を倒せ！</p>
       <p>倒した缶に応じてポイントをゲット</p>
+          <button type="button" class="rule-open" aria-label="キッキングスナイパーの詳しいルールを見る">詳しいルール</button>
     </article>
 
-    <article class="game-card">
+    <article class="game-card" data-rule-image="rules-coin.jpg" data-rule-title="コインスタック" tabindex="0" role="group" aria-label="コインスタック：クリックで詳しいルールを表示">
       <img class="game-image" src="coin.png" alt="コインスタック">
       <h3>コインスタック</h3>
       <p class="game-catch">回る台の上でコインを積み上げろ！</p>
       <p>積み上げたコインの分だけポイントをゲット</p>
+          <button type="button" class="rule-open" aria-label="コインスタックの詳しいルールを見る">詳しいルール</button>
     </article>
 
-    <article class="game-card">
-      <img class="game-image" src="rouletto.png" alt="ルーレット">
-      <h3>ルーレット</h3>
+    <article class="game-card" data-rule-image="rules-roulette.jpg" data-rule-title="ルーレット＆トランプ" tabindex="0" role="group" aria-label="ルーレット＆トランプ：クリックで詳しいルールを表示">
+      <img class="game-image" src="rouletto.png" alt="2分の1ゲーム">
+      <h3>2分の1ゲーム</h3>
       <p class="game-catch">二分の一を当ててポイント増やせ！</p>
       <p>運を味方につけて勝負しよう</p>
+          <button type="button" class="rule-open" aria-label="ルーレット＆トランプの詳しいルールを見る">詳しいルール</button>
     </article>
 
-    <article class="game-card">
+    <article class="game-card" data-rule-image="rules-horse.jpg" data-rule-title="競馬" tabindex="0" role="group" aria-label="競馬：クリックで詳しいルールを表示">
       <img class="game-image" src="horse.png" alt="競馬">
       <h3>競馬</h3>
       <p class="game-catch">今までのポイントを使って最後の賭け！</p>
       <p>最後の大勝負で頂点を目指せ</p>
+          <button type="button" class="rule-open" aria-label="競馬の詳しいルールを見る">詳しいルール</button>
     </article>
   </div>
   <div class="game-carousel-controls">
@@ -587,6 +613,14 @@ button:hover {filter:brightness(1.1);transform:translateY(-1px);}
   </section>
   <small>※ チップ数が多い順に表示されます。</small>
 </main>
+
+<div class="rule-modal" id="rule-modal" role="dialog" aria-modal="true" aria-label="ゲームの詳しいルール" hidden>
+  <button type="button" class="rule-modal-close" id="rule-modal-close" aria-label="閉じる">×</button>
+  <div class="rule-modal-inner" id="rule-modal-inner">
+    <img class="rule-modal-image" id="rule-modal-image" alt="ゲームの詳しいルール">
+  </div>
+</div>
+
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -648,6 +682,51 @@ const firebaseConfig = {
     }, { passive: true });
     setActive(0);
   })();
+
+  // ゲームカードを押すとルール画像を拡大表示する
+  (() => {
+    const modal = document.getElementById('rule-modal');
+    const modalImage = document.getElementById('rule-modal-image');
+    const inner = document.getElementById('rule-modal-inner');
+    const close = document.getElementById('rule-modal-close');
+    let lastFocus = null;
+    function openRules(card) {
+      lastFocus = document.activeElement;
+      modalImage.src = card.dataset.ruleImage;
+      modalImage.alt = `${card.dataset.ruleTitle}の詳しいルール`;
+      modal.hidden = false;
+      document.body.classList.add('rule-modal-open');
+      inner.scrollTop = 0;
+      close.focus();
+    }
+    function closeRules() {
+      modal.hidden = true;
+      document.body.classList.remove('rule-modal-open');
+      modalImage.removeAttribute('src');
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    document.querySelectorAll('#games-section .game-card').forEach(card => {
+      let startX = 0, startY = 0, dragged = false;
+      card.addEventListener('pointerdown', e => { startX = e.clientX; startY = e.clientY; dragged = false; });
+      card.addEventListener('pointermove', e => {
+        if (Math.abs(e.clientX-startX) > 8 || Math.abs(e.clientY-startY) > 8) dragged = true;
+      });
+      card.addEventListener('click', e => { if (!dragged) openRules(card); });
+      card.addEventListener('keydown', e => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target === card) {
+          e.preventDefault(); openRules(card);
+        }
+      });
+    });
+    close.addEventListener('click', closeRules);
+    modal.addEventListener('click', e => { if (e.target === modal) closeRules(); });
+    document.addEventListener('keydown', e => {
+      if (modal.hidden) return;
+      if (e.key === 'Escape') closeRules();
+      if (e.key === 'Tab') { e.preventDefault(); close.focus(); }
+    });
+  })();
+
   const auth = firebase.auth();
   const db = firebase.database();
   const playersRef = db.ref("players");
